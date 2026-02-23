@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AkunRendy.id - Layanan Premium & Reseller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .gradient-brand { background: linear-gradient(135deg, #1e1b4b 0%, #1e40af 100%); }
+        .product-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .modal { display: none; position: fixed; z-index: 100; inset: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; padding: 20px; }
+        .modal.active { display: flex; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- NAVIGATION -->
+    <nav class="glass-nav fixed top-0 w-full z-50 border-b border-slate-200">
+        <div class="max-w-7-xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-2">
+                <div class="bg-blue-600 p-1.5 rounded-lg text-white">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tighter italic">AKUNRENDY<span class="text-blue-600">.ID</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-6 text-sm font-bold text-slate-600">
+                <a href="#katalog" class="hover:text-blue-600">Katalog</a>
+                <a href="#reseller" class="hover:text-blue-600">Reseller</a>
+                <a href="#cara-beli" class="hover:text-blue-600">Cara Beli</a>
+                <a href="#faq" class="hover:text-blue-600">FAQ</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleCart()" class="relative p-2 text-slate-700">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold hidden">0</span>
+                </button>
+                <a href="https://wa.me/6289662947777" target="_blank" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-blue-700 transition-all">
+                    Hubungi Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="pt-32 pb-20 px-4 gradient-brand text-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center relative z-10">
+            <div class="md:w-1/2 space-y-6 text-center md:text-left">
+                <span class="bg-blue-500/30 border border-blue-400/30 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-blue-200">
+                    Toko Akun Terpercaya & Legal
+                </span>
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+                    Nonton Premium <br><span class="text-blue-400">Harga Teman.</span>
+                </h1>
+                <p class="text-lg text-slate-300 max-w-lg mx-auto md:mx-0">
+                    Beli akun Netflix, Spotify, Disney+ dan lainnya dengan harga mulai Rp 15.000 saja. Proses instan 24 jam.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                    <a href="#katalog" class="bg-white text-blue-900 px-8 py-4 rounded-2xl font-bold hover:scale-105 transition-transform text-center shadow-lg">
+                        Beli Sekarang
+                    </a>
+                    <a href="#reseller" class="bg-blue-800/40 border border-white/20 px-8 py-4 rounded-2xl font-bold hover:bg-blue-800/60 transition-all text-center">
+                        Gabung Reseller
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+                <div class="relative">
+                    <div class="absolute -inset-10 bg-blue-600/20 blur-3xl"></div>
+                    <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=500&auto=format&fit=crop" alt="Hero" class="relative rounded-3xl shadow-2xl w-80 md:w-96 transform rotate-2">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- KATALOG -->
+    <section id="katalog" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div>
+                    <h2 class="text-3xl font-extrabold">Katalog Produk</h2>
+                    <p class="text-slate-500 mt-2">Pilih akun premium favorit Anda hari ini.</p>
+                </div>
+                <div class="relative w-full md:w-80">
+                    <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Cari layanan..." class="w-full bg-white border border-slate-200 rounded-2xl py-3 px-12 outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                </div>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <!-- Data diisi oleh JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- RESELLER SECTION -->
+    <section id="reseller" class="py-20 px-4 bg-blue-50">
+        <div class="max-w-5xl mx-auto bg-white rounded-[2.5rem] p-8 md:p-16 shadow-xl border border-blue-100 flex flex-col md:flex-row items-center gap-10">
+            <div class="md:w-1/2 space-y-6">
+                <div class="inline-block bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-xs font-bold uppercase">Open Reseller</div>
+                <h2 class="text-3xl md:text-4xl font-black">Mau Jualan Akun Juga? Gabung Bersama Kami!</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    Dapatkan harga jauh lebih murah di bawah harga pasar. Sangat cocok untuk kamu yang ingin memulai bisnis digital dengan modal minim.
+                </p>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-dashed border-slate-300">
+                    <p class="text-sm font-bold text-slate-400 uppercase tracking-widest">Biaya Pendaftaran</p>
+                    <div class="text-3xl font-black text-blue-600 mt-1">Rp 500.000 <span class="text-sm font-normal text-slate-400">/ 12 Bulan</span></div>
+                </div>
+                <a href="https://wa.me/6289662947777?text=Halo+Admin+AkunRendy.id,+saya+ingin+daftar+menjadi+reseller+Premium" target="_blank" class="block w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-center hover:bg-blue-700 transition-all shadow-xl">
+                    Daftar Lewat WhatsApp
+                </a>
+            </div>
+            <div class="md:w-1/2">
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="flex items-start space-x-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                        <div class="bg-green-100 p-3 rounded-lg text-green-600"><i class="fa-solid fa-tags"></i></div>
+                        <div><h4 class="font-bold">Harga Spesial</h4><p class="text-xs text-slate-500">Harga khusus jauh lebih hemat.</p></div>
+                    </div>
+                    <div class="flex items-start space-x-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                        <div class="bg-purple-100 p-3 rounded-lg text-purple-600"><i class="fa-solid fa-headset"></i></div>
+                        <div><h4 class="font-bold">Prioritas Layanan</h4><p class="text-xs text-slate-500">Support admin lebih cepat.</p></div>
+                    </div>
+                    <div class="flex items-start space-x-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                        <div class="bg-blue-100 p-3 rounded-lg text-blue-600"><i class="fa-solid fa-shield-check"></i></div>
+                        <div><h4 class="font-bold">Full Garansi</h4><p class="text-xs text-slate-500">Garansi akun aman 100%.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARA BERLANGGANAN & ALUR -->
+    <section id="cara-beli" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold">Cara Berlangganan</h2>
+                <p class="text-slate-500 mt-2">Hanya butuh 3 menit sampai akun aktif.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="space-y-4 p-8 bg-white rounded-3xl shadow-sm border border-slate-100">
+                    <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">1</div>
+                    <h3 class="font-bold text-lg">Pilih Produk</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Pilih layanan yang Anda inginkan lalu tambahkan ke keranjang.</p>
+                </div>
+                <div class="space-y-4 p-8 bg-white rounded-3xl shadow-sm border border-slate-100">
+                    <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">2</div>
+                    <h3 class="font-bold text-lg">Bayar QRIS</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Scan kode QRIS yang muncul otomatis di layar Anda saat checkout.</p>
+                </div>
+                <div class="space-y-4 p-8 bg-white rounded-3xl shadow-sm border border-slate-100">
+                    <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">3</div>
+                    <h3 class="font-bold text-lg">Konfirmasi Admin</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Kirim bukti transfer ke WhatsApp admin dan akun langsung dikirim.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ & KENDALA -->
+    <section id="faq" class="py-20 px-4 bg-slate-100">
+        <div class="max-w-4xl mx-auto space-y-12">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold italic">FAQ & BANTUAN</h2>
+            </div>
+            <div class="space-y-4">
+                <details class="bg-white rounded-2xl p-6 shadow-sm group border border-slate-200" open>
+                    <summary class="font-bold cursor-pointer list-none flex justify-between items-center">
+                        Apakah akun ini bergaransi?
+                        <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="text-slate-500 text-sm mt-4">Ya, semua akun di AkunRendy.id memiliki garansi penuh sesuai dengan masa langganan yang dibeli.</p>
+                </details>
+                <details class="bg-white rounded-2xl p-6 shadow-sm group border border-slate-200">
+                    <summary class="font-bold cursor-pointer list-none flex justify-between items-center">
+                        Berapa lama proses akun dikirim?
+                        <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="text-slate-500 text-sm mt-4">Proses pengiriman rata-rata 5-15 menit setelah konfirmasi pembayaran ke WhatsApp Admin.</p>
+                </details>
+            </div>
+            
+            <div class="bg-red-50 border border-red-100 p-8 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <h3 class="text-xl font-bold text-red-700">Laporan Kendala Akun?</h3>
+                    <p class="text-sm text-red-600/80">Jika akun Anda bermasalah atau mati sebelum waktunya, silakan lapor segera.</p>
+                </div>
+                <a href="https://wa.me/6289662947777?text=LAPOR+KENDALA:+Halo+Admin+AkunRendy.id,+saya+mengalami+masalah+dengan+akun+saya..." target="_blank" class="bg-red-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-red-200 flex items-center space-x-2">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>Lapor Sekarang</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CART SIDEBAR -->
+    <div id="cart-sidebar" class="fixed inset-0 z-[100] invisible">
+        <div class="absolute inset-0 bg-black/50" onclick="toggleCart()"></div>
+        <div id="cart-content" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transition-transform duration-300 translate-x-full flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h3 class="font-bold text-lg">Keranjang Belanja</h3>
+                <button onclick="toggleCart()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <!-- Items list -->
+            </div>
+            <div class="p-6 border-t space-y-4">
+                <div class="flex justify-between font-extrabold text-xl">
+                    <span>Total Bayar</span>
+                    <span id="cart-total" class="text-blue-600">Rp 0</span>
+                </div>
+                <button onclick="showCheckout()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-xl">
+                    Lanjutkan Pembayaran
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QRIS MODAL -->
+    <div id="qris-modal" class="modal">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 relative text-center">
+            <button onclick="closeModal('qris-modal')" class="absolute right-6 top-6 text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <h3 class="text-2xl font-black mb-1">Scan QRIS</h3>
+            <p class="text-slate-500 text-sm mb-6">Selesaikan pembayaran untuk memproses pesanan.</p>
+            
+            <div class="bg-white p-4 border-8 border-slate-50 rounded-3xl mb-6">
+                <!-- GANTI URL FOTO QRIS ANDA DI SINI -->
+                <img id="qris-img" src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="QRIS" class="w-64 h-64 mx-auto">
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-xl mb-8">
+                <p class="text-xs font-bold text-blue-400 uppercase">Total Yang Harus Dibayar</p>
+                <p id="qris-total" class="text-3xl font-black text-blue-700">Rp 0</p>
+            </div>
+
+            <button onclick="checkoutWA()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center space-x-3 shadow-lg">
+                <i class="fa-brands fa-whatsapp text-xl"></i>
+                <span>Sudah Bayar? Konfirmasi WA</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-500 py-16 px-4">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-2 space-y-6">
+                <div class="text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-crown text-blue-500"></i>
+                    <span class="text-2xl font-black italic">AKUNRENDY.ID</span>
+                </div>
+                <p class="max-w-xs text-sm">
+                    Penyedia layanan digital premium legal dan terpercaya. Menghadirkan hiburan berkualitas dengan harga paling terjangkau.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6">Menu Bantuan</h4>
+                <ul class="space-y-4 text-sm">
+                    <li><a href="#cara-beli" class="hover:text-blue-500">Cara Pembelian</a></li>
+                    <li><a href="#reseller" class="hover:text-blue-500">Daftar Reseller</a></li>
+                    <li><a href="#faq" class="hover:text-blue-500">Pertanyaan Umum</a></li>
+                    <li><a href="https://wa.me/6289662947777" class="hover:text-blue-500">Hubungi CS</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6">Pembayaran</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-white/10 px-3 py-1 rounded text-[10px] text-white font-bold">QRIS</span>
+                    <span class="bg-white/10 px-3 py-1 rounded text-[10px] text-white font-bold">DANA</span>
+                    <span class="bg-white/10 px-3 py-1 rounded text-[10px] text-white font-bold">OVO</span>
+                    <span class="bg-white/10 px-3 py-1 rounded text-[10px] text-white font-bold">GOPAY</span>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto border-t border-slate-800 mt-16 pt-8 text-center text-xs">
+            &copy; 2024 AkunRendy.id - All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // DATA PRODUK
+        const products = [
+            { id: 1, name: 'Netflix Premium 4K (1 Bulan)', price: 35000, category: 'Streaming', image: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=200&h=200&fit=crop' },
+            { id: 2, name: 'Spotify Family (1 Bulan)', price: 15000, category: 'Music', image: 'https://images.unsplash.com/photo-1614680376593-902f74cc0d41?w=200&h=200&fit=crop' },
+            { id: 3, name: 'Disney+ Hotstar (1 Bulan)', price: 20000, category: 'Streaming', image: 'https://images.unsplash.com/photo-1616469829581-73993eb86b02?w=200&h=200&fit=crop' },
+            { id: 4, name: 'Canva Pro Lifetime (Personal)', price: 25000, category: 'Design', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=200&h=200&fit=crop' },
+            { id: 5, name: 'Youtube Premium (1 Bulan)', price: 12000, category: 'Streaming', image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=200&h=200&fit=crop' },
+            { id: 6, name: 'ChatGPT Plus Shared', price: 65000, category: 'Edukasi', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200&h=200&fit=crop' },
+            { id: 7, name: 'Grammarly Premium (1 Bulan)', price: 40000, category: 'Edukasi', image: 'https://images.unsplash.com/photo-1544391496-1ca7c97457cd?w=200&h=200&fit=crop' },
+            { id: 8, name: 'Picsart Gold Premium', price: 15000, category: 'Design', image: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=200&h=200&fit=crop' }
+        ];
+
+        let cart = [];
+
+        // RENDER FUNGSI
+        function renderProducts(data = products) {
+            const grid = document.getElementById('product-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            
+            data.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all group">
+                        <div class="h-40 bg-slate-100 flex items-center justify-center overflow-hidden">
+                            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="${p.name}">
+                        </div>
+                        <div class="p-4 space-y-1">
+                            <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">${p.category}</p>
+                            <h3 class="font-bold text-sm h-10 overflow-hidden leading-tight">${p.name}</h3>
+                            <div class="flex items-center justify-between pt-2">
+                                <p class="text-slate-900 font-extrabold text-sm">Rp ${p.price.toLocaleString()}</p>
+                                <button onclick="addToCart(${p.id})" class="bg-blue-600 text-white w-8 h-8 rounded-lg flex items-center justify-center hover:bg-slate-900">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        // KERANJANG FUNGSI
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const exists = cart.find(i => i.id === id);
+            if(exists) {
+                exists.qty++;
+            } else {
+                cart.push({...product, qty: 1});
+            }
+            updateUI();
+            if(!document.getElementById('cart-sidebar').classList.contains('visible')) toggleCart();
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if(item) {
+                item.qty += delta;
+                if(item.qty < 1) cart = cart.filter(i => i.id !== id);
+                updateUI();
+            }
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const content = document.getElementById('cart-content');
+            if(sidebar.classList.contains('invisible')) {
+                sidebar.classList.remove('invisible');
+                setTimeout(() => content.classList.remove('translate-x-full'), 10);
+            } else {
+                content.classList.add('translate-x-full');
+                setTimeout(() => sidebar.classList.add('invisible'), 300);
+            }
+        }
+
+        function updateUI() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            const countEl = document.getElementById('cart-count');
+            
+            container.innerHTML = '';
+            let total = 0;
+            let count = 0;
+
+            cart.forEach(item => {
+                total += (item.price * item.qty);
+                count += item.qty;
+                container.innerHTML += `
+                    <div class="flex items-center space-x-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-sm">${item.name}</h4>
+                            <p class="text-blue-600 font-bold text-sm">Rp ${item.price.toLocaleString()}</p>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center bg-white border border-slate-200 rounded text-xs">-</button>
+                                <span class="text-sm font-bold">${item.qty}</span>
+                                <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center bg-white border border-slate-200 rounded text-xs">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            totalEl.innerText = `Rp ${total.toLocaleString()}`;
+            countEl.innerText = count;
+            countEl.classList.toggle('hidden', count === 0);
+        }
+
+        // ALUR CHECKOUT
+        function showCheckout() {
+            if(cart.length === 0) return alert("Pilih produk terlebih dahulu!");
+            const total = document.getElementById('cart-total').innerText;
+            document.getElementById('qris-total').innerText = total;
+            toggleCart();
+            document.getElementById('qris-modal').classList.add('active');
+        }
+
+        function checkoutWA() {
+            const total = document.getElementById('qris-total').innerText;
+            const itemString = cart.map(i => `- ${i.name} (${i.qty}x)`).join('%0A');
+            const waUrl = `https://wa.me/6289662947777?text=Halo+Admin+AkunRendy.id,%0ASaya+ingin+konfirmasi+pembayaran+QRIS+untuk+pesanan:%0A%0A${itemString}%0A%0ATotal:+${total}%0A%0AMohon+segera+diproses.+Terima+kasih!`;
+            window.open(waUrl, '_blank');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // INITIALIZE
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+        });
+    </script>
+</body>
+</html>
+
+
