@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AkunRendy.id - Layanan Digital Premium & Reseller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); }
+        .gradient-blue { background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); }
+        .product-card:hover { transform: translateY(-8px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .modal { display: none; position: fixed; z-index: 100; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+        .modal.active { display: flex; }
+        .qris-frame { border: 10px solid white; border-radius: 20px; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- NAVIGATION -->
+    <nav class="glass-nav fixed top-0 w-full z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-2">
+                <div class="bg-blue-700 p-1.5 rounded-lg text-white">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tighter uppercase">AkunRendy<span class="text-blue-600">.id</span></span>
+            </a>
+
+            <div class="hidden lg:flex items-center space-x-8 text-sm font-bold text-slate-600">
+                <a href="#hero" class="hover:text-blue-600 transition-colors">Beranda</a>
+                <a href="#katalog" class="hover:text-blue-600 transition-colors">Katalog</a>
+                <a href="#cara-beli" class="hover:text-blue-600 transition-colors">Cara Beli</a>
+                <a href="#reseller" class="text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Reseller</a>
+                <a href="#faq" class="hover:text-blue-600 transition-colors">FAQ</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleCart()" class="relative p-2 text-slate-700 hover:bg-slate-100 rounded-full transition-all">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold hidden border-2 border-white">0</span>
+                </button>
+                <button onclick="toggleModal('login-modal')" class="bg-slate-900 text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-blue-700 transition-all shadow-lg">
+                    Login
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header id="hero" class="pt-24 md:pt-40 pb-20 md:pb-32 px-4 gradient-blue relative overflow-hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center relative z-10 text-center md:text-left">
+            <div class="md:w-3/5 text-white space-y-8">
+                <div class="inline-flex items-center space-x-2 bg-blue-500/20 px-4 py-1.5 rounded-full border border-blue-400/30 text-xs font-bold uppercase tracking-widest text-blue-200">
+                    <span class="relative flex h-2 w-2 mr-1">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    Akses Premium Tanpa Mahal
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1]">
+                    Pusat Akun <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">Premium No. 1</span>
+                </h1>
+                <p class="text-lg text-blue-100/80 max-w-xl mx-auto md:mx-0 font-medium">
+                    AkunRendy.id menyediakan layanan langganan Netflix, Spotify, Canva, dan aplikasi premium lainnya dengan proses cepat dan garansi penuh.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
+                    <a href="#katalog" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-blue-500 transition-all shadow-2xl shadow-blue-600/30">
+                        <span>Lihat Katalog</span>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </a>
+                    <a href="#reseller" class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-4 rounded-2xl font-bold hover:bg-white/20 transition-all">
+                        Gabung Reseller
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-2/5 mt-16 md:mt-0 flex justify-center relative">
+                <div class="absolute -inset-10 bg-blue-500/20 blur-[100px] rounded-full"></div>
+                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&auto=format&fit=crop" alt="Digital Services" class="relative rounded-[2.5rem] shadow-2xl w-full max-w-sm border-4 border-white/10 transform -rotate-3 hover:rotate-0 transition-transform duration-700">
+            </div>
+        </div>
+    </header>
+
+    <!-- KATALOG SECTION -->
+    <section id="katalog" class="py-24 px-4 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <h2 class="text-4xl font-extrabold text-slate-900 tracking-tight">Katalog Layanan Digital</h2>
+                <div class="h-1.5 w-20 bg-blue-600 mx-auto rounded-full"></div>
+                <p class="text-slate-500">Dapatkan harga promo khusus hari ini. Semua akun legal dan bergaransi.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 mb-12">
+                <div class="flex-1 flex space-x-3 overflow-x-auto pb-2 no-scrollbar">
+                    <button onclick="filterCategory('Semua')" class="cat-btn active bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold text-sm shadow-lg shadow-blue-100">Semua</button>
+                    <button onclick="filterCategory('Streaming')" class="cat-btn bg-slate-100 text-slate-600 px-8 py-3 rounded-2xl font-bold text-sm hover:bg-slate-200">Streaming</button>
+                    <button onclick="filterCategory('Edukasi')" class="cat-btn bg-slate-100 text-slate-600 px-8 py-3 rounded-2xl font-bold text-sm hover:bg-slate-200">Edukasi</button>
+                    <button onclick="filterCategory('Tools')" class="cat-btn bg-slate-100 text-slate-600 px-8 py-3 rounded-2xl font-bold text-sm hover:bg-slate-200">Tools</button>
+                </div>
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Cari nama akun..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3.5 pl-12 pr-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                </div>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                <!-- Produk rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CARA BERLANGGANAN -->
+    <section id="cara-beli" class="py-24 px-4 bg-slate-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold">Alur Berlangganan</h2>
+                <p class="text-slate-500 mt-2">Mudah, cepat, dan otomatis.</p>
+            </div>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 text-center space-y-4">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">1</div>
+                    <h4 class="font-bold">Pilih Produk</h4>
+                    <p class="text-sm text-slate-500">Pilih layanan premium yang Anda inginkan di katalog.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 text-center space-y-4">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">2</div>
+                    <h4 class="font-bold">Bayar QRIS</h4>
+                    <p class="text-sm text-slate-500">Scan QRIS yang muncul saat checkout untuk pembayaran instan.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 text-center space-y-4">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">3</div>
+                    <h4 class="font-bold">Konfirmasi WA</h4>
+                    <p class="text-sm text-slate-500">Sistem akan mengarahkan Anda ke WhatsApp Admin Rendy.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 text-center space-y-4">
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold"><i class="fa-solid fa-check"></i></div>
+                    <h4 class="font-bold">Terima Akun</h4>
+                    <p class="text-sm text-slate-500">Akun dikirim langsung melalui chat WhatsApp Anda.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESELLER SECTION -->
+    <section id="reseller" class="py-24 px-4">
+        <div class="max-w-5xl mx-auto bg-gradient-to-br from-blue-700 to-indigo-900 rounded-[3rem] p-8 md:p-16 text-white text-center relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <div class="relative z-10 space-y-6">
+                <span class="bg-yellow-400 text-blue-900 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">Peluang Cuan</span>
+                <h2 class="text-4xl md:text-5xl font-black italic">GABUNG JADI RESELLER</h2>
+                <p class="text-blue-100 text-lg max-w-2xl mx-auto font-medium">
+                    Dapatkan harga jauh lebih murah dan akses panel khusus untuk jualan kembali. Keuntungan melimpah dengan modal minimal.
+                </p>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 inline-block px-8 py-6 rounded-3xl">
+                    <p class="text-sm opacity-80 uppercase tracking-widest font-bold">Biaya Pendaftaran</p>
+                    <div class="text-4xl font-black mt-1">Rp 500.000 <span class="text-sm font-normal opacity-70">/ 12 Bulan</span></div>
+                </div>
+                <div class="pt-6">
+                    <a href="https://wa.me/6289662947777?text=Halo+Admin+AkunRendy.id,+saya+ingin+daftar+menjadi+Reseller+Premium" target="_blank" class="bg-white text-blue-700 px-12 py-5 rounded-2xl font-black text-lg hover:scale-105 transition-transform inline-flex items-center space-x-3 shadow-2xl">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i>
+                        <span>DAFTAR VIA WA</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ & KENDALA -->
+    <section id="faq" class="py-24 px-4 bg-slate-50">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16">
+            <div>
+                <h3 class="text-3xl font-extrabold mb-8 flex items-center space-x-3">
+                    <i class="fa-solid fa-circle-question text-blue-600"></i>
+                    <span>Pertanyaan Populer</span>
+                </h3>
+                <div class="space-y-4">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200">
+                        <h4 class="font-bold text-slate-800">Apakah akun ini legal?</h4>
+                        <p class="text-slate-500 text-sm mt-2">Ya, semua akun diproses secara legal melalui sistem subscription resmi. Bukan hasil carding atau phising.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200">
+                        <h4 class="font-bold text-slate-800">Berapa lama proses pengiriman?</h4>
+                        <p class="text-slate-500 text-sm mt-2">Normalnya 5-15 menit setelah konfirmasi pembayaran ke WhatsApp Admin Rendy.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200">
+                        <h4 class="font-bold text-slate-800">Bagaimana jika terjadi kendala?</h4>
+                        <p class="text-slate-500 text-sm mt-2">Kami memberikan garansi penuh selama masa berlangganan. Cukup lapor melalui tombol kendala di bawah.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col justify-center bg-blue-600 rounded-[3rem] p-12 text-white shadow-2xl">
+                <h3 class="text-3xl font-extrabold mb-4">Laporan Kendala</h3>
+                <p class="opacity-80 mb-8 font-medium">Mengalami masalah pada akun? Jangan khawatir, tim support AkunRendy.id siap membantu Anda segera.</p>
+                <a href="https://wa.me/6289662947777?text=LAPOR+KENDALA:+Halo+Admin+AkunRendy.id,+saya+mengalami+kendala+dengan+akun..." target="_blank" class="bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-slate-100 transition-all">
+                    <i class="fa-solid fa-headset text-xl"></i>
+                    <span>Hubungi CS (Lapor Kendala)</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CART SIDEBAR -->
+    <div id="cart-sidebar" class="fixed inset-0 z-[100] invisible">
+        <div class="absolute inset-0 bg-black/60" onclick="toggleCart()"></div>
+        <div id="cart-content" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transition-transform duration-500 translate-x-full flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center bg-slate-50">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-bag-shopping text-blue-600 text-xl"></i>
+                    <h3 class="font-bold text-lg text-slate-800">Kantong Belanja</h3>
+                </div>
+                <button onclick="toggleCart()" class="text-slate-400 hover:text-red-500 transition-colors p-2"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <!-- Items -->
+            </div>
+            <div class="p-8 border-t bg-white space-y-4">
+                <div class="flex justify-between font-black text-2xl">
+                    <span>Total Bayar</span>
+                    <span id="cart-total" class="text-blue-600">Rp 0</span>
+                </div>
+                <button onclick="showQRIS()" class="w-full bg-blue-600 text-white py-5 rounded-[1.5rem] font-bold text-lg flex items-center justify-center space-x-3 hover:bg-blue-700 transition-all shadow-xl shadow-blue-200">
+                    <i class="fa-solid fa-qrcode text-xl"></i>
+                    <span>Bayar Sekarang (QRIS)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL QRIS CHECKOUT -->
+    <div id="qris-modal" class="modal items-center justify-center p-4">
+        <div class="bg-slate-50 w-full max-w-md rounded-[2.5rem] p-8 relative shadow-2xl text-center overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-blue-600"></div>
+            <button onclick="toggleModal('qris-modal')" class="absolute right-6 top-6 text-slate-400 hover:text-slate-900"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <div class="mb-6 mt-4">
+                <h3 class="text-2xl font-black text-slate-900">Scan & Bayar</h3>
+                <p class="text-slate-500 text-sm">Silakan scan kode QRIS di bawah ini</p>
+            </div>
+
+            <!-- FOTO QRIS - BISA DIUBAH DI SINI -->
+            <div class="qris-frame bg-white p-4 mb-6">
+                <img id="qris-image" src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="QRIS AkunRendy.id" class="w-full h-auto mx-auto grayscale-0">
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-2xl mb-8 border border-blue-100">
+                <p class="text-xs text-blue-600 font-bold uppercase mb-1">Total Pembayaran</p>
+                <h2 id="final-total" class="text-3xl font-black text-blue-800">Rp 0</h2>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="checkoutWA()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-green-700 transition-all shadow-xl shadow-green-100">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    <span>Sudah Bayar? Konfirmasi ke WA</span>
+                </button>
+                <p class="text-[10px] text-slate-400 font-medium italic">*Simpan bukti bayar (screenshot) untuk dikirim ke Admin Rendy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL LOGIN -->
+    <div id="login-modal" class="modal items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 relative shadow-2xl">
+            <button onclick="toggleModal('login-modal')" class="absolute right-8 top-8 text-slate-400 hover:text-slate-900"><i class="fa-solid fa-x"></i></button>
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold text-slate-900">Welcome Back</h2>
+                <p class="text-slate-500 text-sm mt-2">Login untuk melihat status pesanan anda.</p>
+            </div>
+            <form class="space-y-5">
+                <div>
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                    <input type="email" placeholder="name@email.com" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm mt-2 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                    <input type="password" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm mt-2 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                </div>
+                <button type="button" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-bold shadow-2xl hover:bg-blue-700 transition-all">
+                    Masuk Sekarang
+                </button>
+            </form>
+            <p class="text-center text-sm text-slate-400 mt-8">Lupa password? <a href="#" class="text-blue-600 font-bold">Klik Disini</a></p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-500 py-20 px-4">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
+            <div class="col-span-1 md:col-span-2 space-y-8">
+                <div class="flex items-center space-x-2 text-white">
+                    <i class="fa-solid fa-bolt-lightning text-blue-500 text-2xl"></i>
+                    <span class="text-2xl font-black tracking-tighter uppercase">AkunRendy<span class="text-blue-600">.id</span></span>
+                </div>
+                <p class="max-w-md text-slate-400 leading-relaxed font-medium">
+                    Solusi terbaik untuk kebutuhan digital Anda. Menyediakan berbagai akun premium dengan sistem pembayaran yang aman dan pelayanan ramah 24/7.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white hover:bg-blue-600 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white hover:bg-blue-600 transition-all"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-white hover:bg-blue-600 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-xs">Navigasi</h4>
+                <ul class="space-y-4 text-sm font-bold">
+                    <li><a href="#hero" class="hover:text-blue-500 transition-colors">Beranda</a></li>
+                    <li><a href="#katalog" class="hover:text-blue-500 transition-colors">Katalog Layanan</a></li>
+                    <li><a href="#reseller" class="hover:text-blue-500 transition-colors">Program Reseller</a></li>
+                    <li><a href="#faq" class="hover:text-blue-500 transition-colors">Bantuan FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-8 uppercase tracking-widest text-xs">Customer Service</h4>
+                <p class="text-sm font-medium mb-4">WhatsApp Admin (Rendy):</p>
+                <a href="https://wa.me/6289662947777" class="text-blue-400 font-black text-lg hover:underline">+62 896-6294-7777</a>
+                <p class="text-xs mt-6 opacity-60">Operasional: 09:00 - 23:00 WIB</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto border-t border-white/5 mt-20 pt-10 text-center text-[10px] font-black uppercase tracking-[0.2em] opacity-40">
+            &copy; 2024 AKUNRENDY.ID OFFICIAL - PREMIUM SERVICE PROVIDER.
+        </div>
+    </footer>
+
+    <!-- FLOAT WA -->
+    <a href="https://wa.me/6289662947777" class="fixed bottom-6 right-6 w-16 h-16 bg-green-500 text-white rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-110 active:scale-95 transition-all z-[90]">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // DATA PRODUK
+        const products = [
+            { id: 1, name: 'Netflix Premium 4K UHD', price: 35000, category: 'Streaming', badge: 'Terlaris' },
+            { id: 2, name: 'Spotify Premium Family 1 Bln', price: 15000, category: 'Streaming', badge: 'Super Murah' },
+            { id: 3, name: 'Canva Pro Lifetime Personal', price: 25000, category: 'Tools', badge: 'Favorit' },
+            { id: 4, name: 'YouTube Premium No Iklan', price: 120000, category: 'Streaming', badge: '1 Tahun' },
+            { id: 5, name: 'ChatGPT Plus Shared', price: 65000, category: 'Edukasi', badge: 'Hot' },
+            { id: 6, name: 'Disney+ Hotstar Sub Indo', price: 20000, category: 'Streaming', badge: '' },
+            { id: 7, name: 'Grammarly Premium', price: 45000, category: 'Edukasi', badge: '' },
+            { id: 8, name: 'Picsart Gold Premium', price: 15000, category: 'Tools', badge: '' },
+            { id: 9, name: 'IQIYI VIP Premium', price: 18000, category: 'Streaming', badge: '' },
+            { id: 10, name: 'Tiktok Seller Tools', price: 75000, category: 'Tools', badge: 'Baru' },
+        ];
+
+        let cart = [];
+
+        // RENDER PRODUK
+        function renderProducts(data = products) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            data.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all group">
+                        <div class="h-40 bg-slate-50 flex items-center justify-center relative overflow-hidden">
+                            <i class="fa-solid fa-cube text-5xl text-slate-200 group-hover:scale-125 transition-transform duration-500"></i>
+                            ${p.badge ? `<span class="absolute top-4 left-4 bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">${p.badge}</span>` : ''}
+                            <div class="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors"></div>
+                        </div>
+                        <div class="p-6 space-y-2">
+                            <p class="text-[10px] font-black text-blue-600/60 uppercase tracking-widest">${p.category}</p>
+                            <h3 class="font-bold text-slate-800 leading-tight h-10 overflow-hidden">${p.name}</h3>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                                <p class="text-slate-900 font-black text-lg">Rp ${p.price.toLocaleString()}</p>
+                                <button onclick="addToCart(${p.id})" class="bg-slate-900 text-white w-10 h-10 rounded-xl hover:bg-blue-600 transition-all flex items-center justify-center shadow-lg active:scale-90">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // FILTER & SEARCH
+        function filterCategory(cat) {
+            const btns = document.querySelectorAll('.cat-btn');
+            btns.forEach(btn => btn.classList.remove('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-100'));
+            btns.forEach(btn => btn.classList.add('bg-slate-100', 'text-slate-600'));
+            
+            event.target.classList.remove('bg-slate-100', 'text-slate-600');
+            event.target.classList.add('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-100');
+            
+            const filtered = cat === 'Semua' ? products : products.filter(p => p.category === cat);
+            renderProducts(filtered);
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        // CART LOGIC
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const exists = cart.find(item => item.id === id);
+            
+            if (exists) {
+                exists.qty++;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            updateCartUI();
+            if(!document.getElementById('cart-sidebar').classList.contains('visible')) toggleCart();
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const content = document.getElementById('cart-content');
+            
+            if (sidebar.classList.contains('invisible')) {
+                sidebar.classList.remove('invisible');
+                setTimeout(() => content.classList.remove('translate-x-full'), 10);
+            } else {
+                content.classList.add('translate-x-full');
+                setTimeout(() => sidebar.classList.add('invisible'), 300);
+            }
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const count = document.getElementById('cart-count');
+            const total = document.getElementById('cart-total');
+            
+            container.innerHTML = '';
+            let totalVal = 0;
+            let totalQty = 0;
+
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-20 opacity-20">
+                        <i class="fa-solid fa-bag-shopping text-6xl mb-4"></i>
+                        <p class="font-bold">Keranjang Kosong</p>
+                    </div>
+                `;
+            }
+
+            cart.forEach(item => {
+                totalVal += item.price * item.qty;
+                totalQty += item.qty;
+                container.innerHTML += `
+                    <div class="flex items-center space-x-4 bg-slate-50 p-5 rounded-[1.5rem] border border-slate-100">
+                        <div class="flex-1">
+                            <h4 class="font-black text-slate-800 text-sm leading-tight">${item.name}</h4>
+                            <p class="text-blue-600 text-sm font-black mt-1">Rp ${item.price.toLocaleString()}</p>
+                            <div class="flex items-center space-x-6 mt-4">
+                                <div class="flex items-center space-x-3 bg-white px-2 py-1 rounded-lg border">
+                                    <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-red-500"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                                    <span class="text-xs font-black text-slate-700">${item.qty}</span>
+                                    <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-blue-600"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                </div>
+                                <button onclick="removeFromCart(${item.id})" class="text-[10px] text-red-400 font-bold uppercase tracking-widest hover:text-red-600">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            count.innerText = totalQty;
+            count.classList.toggle('hidden', totalQty === 0);
+            total.innerText = `Rp ${totalVal.toLocaleString()}`;
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if(item) {
+                item.qty += delta;
+                if(item.qty < 1) removeFromCart(id);
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+        }
+
+        // CHECKOUT FLOW
+        function showQRIS() {
+            if(cart.length === 0) return alert("Keranjang belanja anda masih kosong!");
+            
+            const finalTotal = document.getElementById('cart-total').innerText;
+            document.getElementById('final-total').innerText = finalTotal;
+            
+            toggleCart(); // Tutup cart
+            toggleModal('qris-modal'); // Buka QRIS
+        }
+
+        function checkoutWA() {
+            const text = `Halo Admin AkunRendy.id,\n\nSaya telah melakukan pembayaran QRIS untuk pesanan berikut:\n\n${cart.map(i => `- ${i.name} (${i.qty}x)`).join('\n')}\n\n*Total Bayar: ${document.getElementById('final-total').innerText}*\n\nMohon segera diproses ya Min. Terima kasih!`;
+            window.open(`https://wa.me/6289662947777?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('active');
+        }
+
+        // INIT LOAD
+        window.onload = () => {
+            renderProducts();
+            updateCartUI();
+        }
+    </script>
+</body>
+</html>
+
+
