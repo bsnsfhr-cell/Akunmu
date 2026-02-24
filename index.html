@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALINEA - Premium Digital Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        .premium-card {
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .premium-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-alinea {
+            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+        }
+
+        .btn-alinea:hover {
+            background-color: #333;
+            letter-spacing: 0.15em;
+        }
+
+        /* Hide Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .active-filter {
+            border-bottom: 2px solid #000;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-sm z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl font-black tracking-tighter cursor-pointer" onclick="showPage('home')">ALINEA<span class="text-gray-400">.DIGITAL</span></h1>
+                </div>
+                
+                <div class="hidden md:flex space-x-10">
+                    <button onclick="showPage('home')" class="text-xs font-bold uppercase tracking-widest hover:text-gray-500">Katalog</button>
+                    <button class="text-xs font-bold uppercase tracking-widest hover:text-gray-500">Bantuan</button>
+                    <button class="text-xs font-bold uppercase tracking-widest hover:text-gray-500">Testimoni</button>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button class="relative" onclick="showPage('cart')">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-view" class="pt-24 min-h-screen">
+        <!-- Content Injected Here -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-16 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <h2 class="text-xl font-black tracking-tighter">ALINEA.</h2>
+                <p class="text-gray-400 text-sm mt-2">Penyedia Layanan Digital Premium Terpercaya.</p>
+            </div>
+            <div class="flex space-x-6 text-sm font-bold uppercase tracking-widest">
+                <a href="#" class="hover:text-gray-400">Instagram</a>
+                <a href="#" class="hover:text-gray-400">WhatsApp</a>
+                <a href="#" class="hover:text-gray-400">Telegram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Produk Aplikasi
+        const apps = [
+            { id: 1, name: "Netflix Premium", price: 35000, category: "Streaming", duration: "30 Hari", desc: "Kualitas 4K UHD + HDR. Akun Private.", icon: "fa-netflix", color: "bg-red-600" },
+            { id: 2, name: "Spotify Individual", price: 25000, category: "Music", duration: "30 Hari", desc: "Bebas Iklan, Download Musik, Kualitas Tinggi.", icon: "fa-spotify", color: "bg-green-500" },
+            { id: 3, name: "Canva Pro", price: 15000, category: "Design", duration: "30 Hari", desc: "Akses semua template dan elemen premium.", icon: "fa-palette", color: "bg-blue-400" },
+            { id: 4, name: "YouTube Premium", price: 20000, category: "Streaming", duration: "30 Hari", desc: "Tanpa Iklan, Putar di Latar Belakang.", icon: "fa-youtube", color: "bg-red-500" },
+            { id: 5, name: "Disney+ Hotstar", price: 30000, category: "Streaming", duration: "30 Hari", desc: "Film Marvel, Disney, dan Lokal Terlengkap.", icon: "fa-play", color: "bg-blue-800" },
+            { id: 6, name: "ChatGPT Plus", price: 320000, category: "Productivity", duration: "30 Hari", desc: "Akses GPT-4, DALL-E, dan respon cepat.", icon: "fa-robot", color: "bg-teal-600" },
+            { id: 7, name: "Adobe Creative Cloud", price: 150000, category: "Design", duration: "30 Hari", desc: "Full akses aplikasi Adobe original.", icon: "fa-adobe", color: "bg-red-700" },
+            { id: 8, name: "Grammarly Premium", price: 45000, category: "Productivity", duration: "30 Hari", desc: "Cek tata bahasa Inggris tingkat lanjut.", icon: "fa-pen-nib", color: "bg-green-600" }
+        ];
+
+        let cart = [];
+        let currentFilter = 'All';
+
+        function formatIDR(num) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+        }
+
+        function showPage(page) {
+            const main = document.getElementById('main-view');
+            window.scrollTo(0,0);
+
+            if (page === 'home') {
+                renderHome(main);
+            } else if (page === 'cart') {
+                renderCart(main);
+            } else if (page === 'checkout') {
+                renderCheckout(main);
+            } else if (page === 'success') {
+                renderSuccess(main);
+            }
+        }
+
+        function renderHome(container) {
+            const categories = ['All', ...new Set(apps.map(a => a.category))];
+            
+            let filteredApps = currentFilter === 'All' ? apps : apps.filter(a => a.category === currentFilter);
+
+            container.innerHTML = `
+                <div class="max-w-7xl mx-auto px-6 lg:px-12 py-10">
+                    <header class="mb-16">
+                        <h2 class="text-4xl font-light tracking-tight mb-4">Premium <span class="font-bold text-black">Collections</span></h2>
+                        <div class="flex space-x-8 border-b border-gray-100 overflow-x-auto no-scrollbar">
+                            ${categories.map(cat => `
+                                <button onclick="setFilter('${cat}')" class="pb-4 text-xs font-bold uppercase tracking-widest transition-all ${currentFilter === cat ? 'active-filter' : 'text-gray-400 hover:text-black'}">${cat}</button>
+                            `).join('')}
+                        </div>
+                    </header>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                        ${filteredApps.map(app => `
+                            <div class="premium-card group cursor-pointer">
+                                <div class="relative aspect-square bg-gray-50 flex items-center justify-center overflow-hidden mb-6">
+                                    <div class="${app.color} w-24 h-24 rounded-2xl shadow-xl flex items-center justify-center text-white text-4xl group-hover:scale-110 transition-transform duration-500">
+                                        <i class="fa-solid ${app.icon}"></i>
+                                    </div>
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                        <button onclick="addToCart(${app.id})" class="bg-white text-black px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-black hover:text-white transition-all">Add to Cart</button>
+                                    </div>
+                                    <span class="absolute top-4 left-4 text-[10px] font-bold uppercase tracking-widest bg-white px-2 py-1 border border-gray-100">${app.duration}</span>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">${app.category}</p>
+                                    <h3 class="text-sm font-bold uppercase tracking-wide">${app.name}</h3>
+                                    <p class="text-sm font-medium mt-1">${formatIDR(app.price)}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function setFilter(cat) {
+            currentFilter = cat;
+            showPage('home');
+        }
+
+        function addToCart(id) {
+            const app = apps.find(a => a.id === id);
+            const exists = cart.find(c => c.id === id);
+            if (exists) {
+                exists.qty++;
+            } else {
+                cart.push({ ...app, qty: 1 });
+            }
+            updateCartUI();
+            showToast(`${app.name} ditambahkan`);
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((acc, curr) => acc + curr.qty, 0);
+            document.getElementById('cart-count').innerText = count;
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-10 left-1/2 -translate-x-1/2 bg-black text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest z-[100] animate-bounce";
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        function renderCart(container) {
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="max-w-7xl mx-auto px-6 py-32 text-center">
+                        <p class="text-sm font-bold uppercase tracking-[0.3em] text-gray-300 mb-8">Keranjang Anda Kosong</p>
+                        <button onclick="showPage('home')" class="bg-black text-white px-10 py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-gray-800 transition">Back to Katalog</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const subtotal = cart.reduce((acc, curr) => acc + (curr.price * curr.qty), 0);
+
+            container.innerHTML = `
+                <div class="max-w-3xl mx-auto px-6 py-12">
+                    <h2 class="text-2xl font-black uppercase tracking-tighter mb-12 border-b pb-6">Your Selection</h2>
+                    <div class="space-y-8">
+                        ${cart.map(item => `
+                            <div class="flex items-center justify-between border-b border-gray-50 pb-8">
+                                <div class="flex items-center space-x-6">
+                                    <div class="${item.color} w-16 h-16 rounded-xl flex items-center justify-center text-white text-xl">
+                                        <i class="fa-solid ${item.icon}"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-bold uppercase">${item.name}</h3>
+                                        <p class="text-xs text-gray-400">${item.duration}</p>
+                                        <div class="flex items-center space-x-4 mt-2">
+                                            <button onclick="changeQty(${item.id}, -1)" class="text-gray-400 hover:text-black">－</button>
+                                            <span class="text-xs font-bold">${item.qty}</span>
+                                            <button onclick="changeQty(${item.id}, 1)" class="text-gray-400 hover:text-black">＋</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-bold">${formatIDR(item.price * item.qty)}</p>
+                                    <button onclick="removeFromCart(${item.id})" class="text-[10px] uppercase font-bold text-red-400 mt-2">Remove</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mt-12 pt-8">
+                        <div class="flex justify-between items-end mb-8">
+                            <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Total Estimation</span>
+                            <span class="text-2xl font-black">${formatIDR(subtotal)}</span>
+                        </div>
+                        <button onclick="showPage('checkout')" class="w-full bg-black text-white py-5 text-xs font-bold uppercase tracking-[0.3em] hover:bg-gray-800 transition">Proceed to Checkout</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(c => c.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) return removeFromCart(id);
+                updateCartUI();
+                renderCart(document.getElementById('main-view'));
+            }
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(c => c.id !== id);
+            updateCartUI();
+            renderCart(document.getElementById('main-view'));
+        }
+
+        function renderCheckout(container) {
+            const subtotal = cart.reduce((acc, curr) => acc + (curr.price * curr.qty), 0);
+            
+            container.innerHTML = `
+                <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-2 gap-20">
+                    <div>
+                        <h2 class="text-xl font-bold uppercase tracking-tight mb-8">Informasi Kontak</h2>
+                        <form onsubmit="event.preventDefault(); showPage('success')" class="space-y-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Nama Lengkap</label>
+                                <input type="text" required class="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition text-sm">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Nomor WhatsApp (Aktif)</label>
+                                <input type="tel" placeholder="0812..." required class="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition text-sm">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Email untuk Pengiriman</label>
+                                <input type="email" required class="w-full border-b border-gray-200 py-3 focus:outline-none focus:border-black transition text-sm">
+                            </div>
+                            
+                            <div class="pt-6">
+                                <h3 class="text-sm font-bold uppercase mb-4">Metode Pembayaran</h3>
+                                <div class="grid grid-cols-1 gap-3">
+                                    <label class="flex justify-between items-center p-4 border border-black cursor-pointer bg-black text-white">
+                                        <span class="text-xs font-bold uppercase tracking-widest">QRIS / E-Wallet</span>
+                                        <i class="fa-solid fa-qrcode"></i>
+                                    </label>
+                                    <label class="flex justify-between items-center p-4 border border-gray-100 hover:border-black cursor-pointer transition">
+                                        <span class="text-xs font-bold uppercase tracking-widest">Bank Transfer</span>
+                                        <i class="fa-solid fa-building-columns text-gray-300"></i>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-black text-white py-5 text-xs font-bold uppercase tracking-[0.3em] mt-8">Confirm Payment</button>
+                        </form>
+                    </div>
+
+                    <div class="bg-gray-50 p-10 h-fit">
+                        <h2 class="text-xs font-black uppercase tracking-[0.2em] mb-8 pb-4 border-b">Summary</h2>
+                        <div class="space-y-4 mb-8">
+                            ${cart.map(item => `
+                                <div class="flex justify-between text-sm italic">
+                                    <span class="text-gray-500">${item.name} (x${item.qty})</span>
+                                    <span class="font-bold">${formatIDR(item.price * item.qty)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="border-t border-gray-200 pt-6 flex justify-between items-center">
+                            <span class="text-xs font-bold uppercase tracking-widest">Total Bayar</span>
+                            <span class="text-xl font-black">${formatIDR(subtotal)}</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-6 leading-relaxed uppercase tracking-tighter">* Pesanan akan diproses otomatis setelah pembayaran terverifikasi.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSuccess(container) {
+            cart = [];
+            updateCartUI();
+            container.innerHTML = `
+                <div class="max-w-7xl mx-auto px-6 py-32 text-center">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-black text-white rounded-full mb-8 shadow-2xl">
+                        <i class="fa-solid fa-check text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-black uppercase tracking-tighter mb-4">Order Received</h2>
+                    <p class="text-gray-500 text-sm max-w-sm mx-auto mb-12 uppercase tracking-widest leading-loose">Terima kasih. Pesanan Anda sedang diproses. Silakan cek WhatsApp/Email untuk detail akses akun premium Anda.</p>
+                    <button onclick="showPage('home')" class="border border-black px-12 py-4 text-[10px] font-bold uppercase tracking-[0.3em] hover:bg-black hover:text-white transition">Back to Store</button>
+                </div>
+            `;
+        }
+
+        // Initialize
+        showPage('home');
+    </script>
+</body>
+</html>
+
