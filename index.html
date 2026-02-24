@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PandaPedia | Modern Digital Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; padding-bottom: 70px; }
+        .page { display: none; min-height: 100vh; }
+        .page.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .product-card { 
+            background: white; 
+            border-radius: 1.25rem; 
+            border: 1px solid #f1f5f9; 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
+            max-width: 180px;
+            margin: 0 auto;
+        }
+        
+        .product-card:active { transform: scale(0.96); }
+
+        .image-wrapper {
+            position: relative;
+            height: 110px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0c4a6e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            background-color: #0891b2;
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 100;
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .tab-item.active {
+            color: #0891b2;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- Navbar Atas -->
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-lg border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center space-x-2" onclick="showPage('home-page'); updateTab('home')">
+                <div class="w-8 h-8 bg-cyan-600 rounded-lg flex items-center justify-center text-white font-extrabold text-sm shadow-sm">P</div>
+                <div class="flex flex-col leading-none">
+                    <span class="font-black text-sm tracking-tight text-slate-900 uppercase">PandaPedia</span>
+                </div>
+            </div>
+            <button class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-600">
+                <i class="fa-solid fa-bell text-xs"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Navigation Tab Bar Bawah -->
+    <div class="tab-bar">
+        <div class="tab-item active" id="tab-home" onclick="showPage('home-page'); updateTab('home')">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span>Home</span>
+        </div>
+        <div class="tab-item" id="tab-catalog" onclick="scrollToId('katalog-section'); updateTab('catalog')">
+            <i class="fa-solid fa-layer-group text-lg"></i>
+            <span>Katalog</span>
+        </div>
+        <div class="tab-item" id="tab-reseller" onclick="scrollToId('reseller-section'); updateTab('reseller')">
+            <i class="fa-solid fa-handshake text-lg"></i>
+            <span>Reseller</span>
+        </div>
+        <div class="tab-item" id="tab-help" onclick="window.open('https://wa.me/628976071999')">
+            <i class="fa-solid fa-headset text-lg"></i>
+            <span>Bantuan</span>
+        </div>
+    </div>
+
+    <!-- Halaman Utama -->
+    <div id="home-page" class="page active pt-14">
+        
+        <!-- Hero Section -->
+        <section class="hero-bg pt-12 pb-20 px-6 text-center text-white rounded-b-[40px] shadow-lg">
+            <h1 class="text-3xl font-extrabold uppercase tracking-tight mb-2">PandaPedia</h1>
+            <p class="text-[11px] font-medium opacity-90 leading-relaxed mb-8 max-w-[280px] mx-auto uppercase tracking-wider">
+                Platform Produk Digital Terpercaya. Transaksi Otomatis 24 Jam dengan Harga Kompetitif & Garansi Penuh.
+            </p>
+            <div class="max-w-md mx-auto bg-white rounded-full p-1 flex items-center shadow-lg">
+                <input type="text" placeholder="Lagi cari produk apa nih kak ?" class="flex-1 bg-transparent px-5 py-2 text-xs text-slate-600 outline-none font-medium">
+                <button class="w-9 h-9 bg-cyan-600 rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-magnifying-glass text-xs"></i></button>
+            </div>
+        </section>
+
+        <!-- Flash Sale -->
+        <div class="px-4 -mt-10 mb-8">
+            <div class="bg-cyan-700/80 backdrop-blur-md rounded-3xl p-4 border border-white/10 shadow-xl">
+                <div class="flex items-center justify-between mb-3 px-1 text-white">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-yellow-400"></i>
+                        <span class="font-black italic text-xs uppercase">Flash Sale</span>
+                    </div>
+                </div>
+                <div class="flex overflow-x-auto hide-scrollbar gap-3 pb-2" id="flash-sale-grid"></div>
+            </div>
+        </div>
+
+        <!-- Section Katalog -->
+        <div id="katalog-section">
+            <header class="px-4 py-2 flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-cyan-600 shadow-sm border border-slate-100"><i class="fa-solid fa-grid-2 text-xs"></i></div>
+                <div>
+                    <h2 class="text-sm font-black uppercase text-slate-800">Katalog Produk</h2>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase">Layanan Terbaik</p>
+                </div>
+            </header>
+            <div class="max-w-7xl mx-auto px-4 pb-12">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="main-grid"></div>
+            </div>
+        </div>
+
+        <!-- Section Reseller -->
+        <div id="reseller-section" class="px-4 py-8 bg-slate-100 rounded-t-[40px]">
+            <div class="text-center mb-8">
+                <h2 class="text-xl font-black text-slate-800 uppercase italic">Gabung Reseller</h2>
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Dapatkan Harga Lebih Murah & Cuan Maksimal</p>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-4 max-w-sm mx-auto">
+                <!-- Paket Reseller 1 -->
+                <div class="bg-white p-6 rounded-[2rem] shadow-md border border-slate-200 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-cyan-600 text-white text-[8px] font-black px-4 py-1.5 rounded-bl-2xl uppercase">Terlaris</div>
+                    <h3 class="text-sm font-black text-slate-800 mb-1 uppercase">Paket Permanent</h3>
+                    <p class="text-[9px] text-slate-400 font-bold mb-4 uppercase">Akses Selamanya</p>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-2xl font-black text-cyan-600">Rp 1.000.000</span>
+                    </div>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-600"><i class="fa-solid fa-check text-green-500"></i> Harga VIP Selamanya</li>
+                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-600"><i class="fa-solid fa-check text-green-500"></i> Support Group Premium</li>
+                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-600"><i class="fa-solid fa-check text-green-500"></i> Tools Marketing Lengkap</li>
+                    </ul>
+                    <button onclick="orderReseller('Permanent', 1000000)" class="w-full py-3 bg-cyan-600 text-white rounded-xl font-black text-[10px] uppercase shadow-lg shadow-cyan-200">Daftar Sekarang</button>
+                </div>
+
+                <!-- Paket Reseller 2 -->
+                <div class="bg-white p-6 rounded-[2rem] shadow-md border border-slate-200 relative overflow-hidden">
+                    <h3 class="text-sm font-black text-slate-800 mb-1 uppercase">Paket Hemat</h3>
+                    <p class="text-[9px] text-slate-400 font-bold mb-4 uppercase">Durasi 5 Bulan</p>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-2xl font-black text-slate-700">Rp 500.000</span>
+                    </div>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-600"><i class="fa-solid fa-check text-green-500"></i> Harga VIP Member</li>
+                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-600"><i class="fa-solid fa-check text-green-500"></i> Masa Aktif 150 Hari</li>
+                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-600"><i class="fa-solid fa-check text-green-500"></i> Update Produk Rutin</li>
+                    </ul>
+                    <button onclick="orderReseller('Hemat 5 Bulan', 500000)" class="w-full py-3 border-2 border-slate-200 text-slate-600 rounded-xl font-black text-[10px] uppercase hover:bg-slate-50 transition-all">Pilih Paket</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Detail & Pembayaran QRIS (Digabung untuk efisiensi) -->
+    <div id="detail-page" class="page pt-4 pb-8 bg-white">
+        <div class="px-4 max-w-lg mx-auto">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="showPage('home-page')" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600"><i class="fa-solid fa-chevron-left"></i></button>
+                <span class="font-black italic uppercase text-[10px]">Lanjutkan Pembayaran</span>
+                <div class="w-10"></div>
+            </div>
+            
+            <div id="detail-content" class="mb-6"></div>
+
+            <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100 space-y-4">
+                <div class="relative">
+                    <label class="text-[8px] font-black uppercase text-cyan-600 absolute -top-1.5 left-3 bg-white px-1">Nama Lengkap</label>
+                    <input type="text" id="cust-name" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold outline-none" placeholder="Masukkan nama...">
+                </div>
+                <div class="relative" id="target-container">
+                    <label class="text-[8px] font-black uppercase text-cyan-600 absolute -top-1.5 left-3 bg-white px-1">Target / ID Akun</label>
+                    <input type="text" id="cust-target" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold outline-none" placeholder="Masukkan ID/Email...">
+                </div>
+                <button id="pay-btn" onclick="preparePayment()" class="w-full py-4 bg-cyan-600 text-white rounded-2xl font-black text-sm uppercase shadow-lg shadow-cyan-100">BAYAR QRIS SEKARANG</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal (Simulasi QRIS) -->
+    <div id="payment-page" class="page pt-4 pb-8 bg-slate-50">
+        <div class="px-4 max-w-md mx-auto text-center">
+            <div class="bg-white rounded-[3rem] p-8 shadow-xl border border-slate-100 relative overflow-hidden">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" class="h-6 mx-auto mb-4">
+                <div class="bg-slate-50 p-4 rounded-3xl inline-block mb-6"><img id="qris-img" class="w-56 h-56 rounded-xl"></div>
+                <div class="text-left bg-slate-50 p-5 rounded-2xl space-y-2 mb-6">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase"><span>Total Bayar</span><span id="price-total" class="text-slate-900 text-lg font-black"></span></div>
+                    <p class="text-[8px] text-yellow-600 font-bold italic">*Transfer sesuai nominal hingga angka terakhir!</p>
+                </div>
+                <button onclick="confirmToWA()" class="w-full py-4 bg-green-500 text-white rounded-2xl font-black text-sm uppercase shadow-lg flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp"></i> KONFIRMASI WA</button>
+            </div>
+            <button onclick="showPage('home-page')" class="mt-8 text-slate-400 text-xs font-bold underline">Kembali ke Beranda</button>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { id: 1, name: "Netflix Premium", price: 35000, stock: 124, icon: "fa-play", isFlash: true },
+            { id: 2, name: "Youtube Premium", price: 12000, stock: 89, icon: "fa-youtube", isFlash: true },
+            { id: 3, name: "Canva Pro Aktif", price: 15000, stock: 542, icon: "fa-palette", isFlash: true },
+            { id: 4, name: "ChatGPT Plus Pro", price: 185000, stock: 12, icon: "fa-robot", isFlash: false },
+            { id: 5, name: "Jasa Website Pro", price: 750000, stock: 5, icon: "fa-code", isFlash: false },
+            { id: 6, name: "Spotify Individual", price: 25000, stock: 67, icon: "fa-music", isFlash: false }
+        ];
+
+        let selectedProduct = null;
+        let invoice = { total: 0 };
+
+        function init() {
+            renderGrids();
+        }
+
+        function renderGrids() {
+            const mainGrid = document.getElementById('main-grid');
+            const flashGrid = document.getElementById('flash-sale-grid');
+            
+            flashGrid.innerHTML = products.filter(p => p.isFlash).map(p => `
+                <div class="bg-white rounded-2xl p-2 min-w-[110px] flex flex-col items-center shadow-sm" onclick="openDetail(${p.id})">
+                    <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-cyan-600 mb-2"><i class="fa-solid ${p.icon} text-lg"></i></div>
+                    <h4 class="text-[9px] font-black uppercase text-slate-800 leading-tight h-5 mb-1">${p.name}</h4>
+                    <p class="text-[10px] font-black text-cyan-600">Rp ${p.price.toLocaleString('id-ID')}</p>
+                </div>
+            `).join('');
+
+            mainGrid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <div class="image-wrapper">
+                        <h4 class="text-white font-black italic text-center px-4 uppercase text-[10px]">${p.name}</h4>
+                        <div class="absolute top-2 right-2 text-white/50 text-[10px]"><i class="fa-solid ${p.icon}"></i></div>
+                    </div>
+                    <div class="p-2.5">
+                        <h3 class="text-[10px] font-bold text-slate-800 mb-1 truncate">${p.name}</h3>
+                        <p class="text-[12px] font-black text-cyan-600 mb-2">Rp ${p.price.toLocaleString('id-ID')}</p>
+                        <button onclick="openDetail(${p.id})" class="w-full py-2 bg-cyan-600 text-white rounded-lg text-[8px] font-black uppercase active:scale-95 transition-all">Beli</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openDetail(id) {
+            selectedProduct = products.find(p => p.id === id);
+            document.getElementById('target-container').style.display = 'block';
+            const content = document.getElementById('detail-content');
+            content.innerHTML = `
+                <div class="bg-cyan-600 p-8 rounded-[2rem] text-white text-center shadow-lg">
+                    <h2 class="text-xl font-black uppercase italic">${selectedProduct.name}</h2>
+                    <p class="text-2xl font-black mt-2">Rp ${selectedProduct.price.toLocaleString('id-ID')}</p>
+                </div>
+            `;
+            showPage('detail-page');
+        }
+
+        function orderReseller(type, price) {
+            selectedProduct = { name: "Paket Reseller " + type, price: price };
+            document.getElementById('target-container').style.display = 'none'; // Reseller gak butuh target ID awal
+            const content = document.getElementById('detail-content');
+            content.innerHTML = `
+                <div class="bg-slate-900 p-8 rounded-[2rem] text-white text-center shadow-lg">
+                    <p class="text-cyan-400 text-[9px] font-black uppercase tracking-widest mb-1">Pendaftaran Member</p>
+                    <h2 class="text-xl font-black uppercase italic">${selectedProduct.name}</h2>
+                    <p class="text-2xl font-black mt-2 text-cyan-500">Rp ${selectedProduct.price.toLocaleString('id-ID')}</p>
+                </div>
+            `;
+            showPage('detail-page');
+        }
+
+        function preparePayment() {
+            const name = document.getElementById('cust-name').value;
+            if (!name) return alert("Isi nama dulu kak!");
+
+            const unique = Math.floor(Math.random() * 800) + 100;
+            invoice = {
+                name: name,
+                target: document.getElementById('cust-target').value || 'Pendaftaran Reseller',
+                total: selectedProduct.price + unique
+            };
+
+            document.getElementById('price-total').innerText = `Rp ${invoice.total.toLocaleString('id-ID')}`;
+            document.getElementById('qris-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=PANDAPEDIA-${invoice.total}`;
+            showPage('payment-page');
+        }
+
+        function confirmToWA() {
+            const msg = `*ORDER PANDAPEDIA*%0A%0A*Produk:* ${selectedProduct.name}%0A*Total:* Rp ${invoice.total.toLocaleString('id-ID')}%0A*Nama:* ${invoice.name}%0A*Target:* ${invoice.target}`;
+            window.open(`https://wa.me/628976071999?text=${msg}`, '_blank');
+        }
+
+        function scrollToId(id) {
+            showPage('home-page');
+            setTimeout(() => {
+                const element = document.getElementById(id);
+                window.scrollTo({ top: element.offsetTop - 70, behavior: 'smooth' });
+            }, 100);
+        }
+
+        function updateTab(tab) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
+
