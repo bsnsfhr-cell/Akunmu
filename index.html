@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PandaPedia | Modern Digital Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; padding-bottom: 80px; }
+        .page { display: none; min-height: 100vh; }
+        .page.active { display: block; animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .product-card { 
+            background: white; 
+            border-radius: 1rem; 
+            border: 1px solid #f1f5f9; 
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+        
+        .hero-bg {
+            background-color: #0891b2;
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .tab-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 100;
+        }
+
+        .variant-card {
+            border: 2px solid #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .variant-card.selected {
+            border-color: #0891b2;
+            background-color: #f0f9ff;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .tab-btn {
+            position: relative;
+            padding-bottom: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+        
+        .tab-btn.active {
+            color: #0891b2;
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: #0891b2;
+            border-radius: 99px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center space-x-2" onclick="showPage('home-page')">
+                <div class="w-8 h-8 bg-cyan-600 rounded-lg flex items-center justify-center text-white font-extrabold shadow-lg">P</div>
+                <span class="font-black text-sm tracking-tighter uppercase">PandaPedia</span>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600"><i class="fa-solid fa-bars text-xs"></i></button>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page active pt-14">
+        <section class="hero-bg pt-10 pb-16 px-6 text-center text-white rounded-b-[3rem]">
+            <h1 class="text-3xl font-black uppercase italic mb-2 tracking-tight">PLATFORM DIGITAL</h1>
+            <p class="text-[10px] font-bold opacity-80 mb-8 uppercase tracking-widest">Transaksi Otomatis & Garansi Penuh</p>
+            <div class="flex overflow-x-auto gap-4 no-scrollbar pb-4" id="flash-sale-list"></div>
+        </section>
+
+        <!-- Search Bar -->
+        <div class="px-6 -mt-8 mb-10">
+            <div class="bg-white rounded-2xl shadow-xl p-1 flex items-center border border-slate-100">
+                <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Lagi cari produk apa nih kak?" class="flex-1 bg-transparent px-5 py-4 text-xs font-semibold outline-none">
+                <div class="w-12 h-12 bg-cyan-600 rounded-xl flex items-center justify-center text-white shadow-lg"><i class="fa-solid fa-magnifying-glass"></i></div>
+            </div>
+        </div>
+
+        <div class="px-4 mb-20">
+            <div class="flex items-center space-x-2 mb-5 px-2">
+                <div class="p-2 bg-cyan-100 text-cyan-600 rounded-lg"><i class="fa-solid fa-grid-2"></i></div>
+                <div>
+                    <h2 class="text-xs font-black uppercase text-slate-800">Katalog Produk</h2>
+                    <p class="text-[9px] font-bold text-slate-400">PILIH PRODUK PREMIUM YANG ANDA INGINKAN</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3" id="main-catalog"></div>
+        </div>
+    </div>
+
+    <!-- Detail/Checkout Page -->
+    <div id="detail-page" class="page pt-4 pb-24 bg-white">
+        <div class="px-6 max-w-lg mx-auto">
+            <div class="flex items-center gap-4 mb-6">
+                <button onclick="showPage('home-page')" class="text-slate-400"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+                <h2 class="text-sm font-black uppercase text-slate-800 italic">Secure Checkout</h2>
+            </div>
+
+            <!-- Product Header -->
+            <div id="checkout-header" class="flex items-center gap-4 mb-8">
+                <!-- Content via JS -->
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-100 mb-6 gap-8">
+                <button id="tab-desc-btn" onclick="switchTab('desc')" class="tab-btn active">Deskripsi</button>
+                <button id="tab-tnc-btn" onclick="switchTab('tnc')" class="tab-btn">Syarat & Ketentuan</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="tab-content" class="text-[11px] text-slate-500 font-medium leading-relaxed mb-10 min-h-[60px]">
+                <!-- Content via JS -->
+            </div>
+
+            <!-- Variation Section -->
+            <div class="mb-10">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-[10px] font-black uppercase text-slate-800 tracking-wider">Pilih Paket Kamu</h3>
+                    <span class="text-[8px] font-bold bg-cyan-50 text-cyan-600 px-2 py-1 rounded">Maks 1 Qty</span>
+                </div>
+                
+                <div id="variants-list" class="space-y-3">
+                    <!-- Variasi via JS -->
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="space-y-4">
+                <div class="bg-cyan-50 border border-cyan-100 p-4 rounded-2xl flex items-start gap-3">
+                    <div class="text-cyan-600 mt-1"><i class="fa-solid fa-circle-user text-xl"></i></div>
+                    <div>
+                        <h4 class="text-[10px] font-black text-cyan-800 uppercase">Penting!</h4>
+                        <p class="text-[9px] text-cyan-700">Pastikan data target (Email/ID) sudah benar sebelum melakukan pembayaran.</p>
+                    </div>
+                </div>
+                <input type="text" id="cust-target" class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-xs font-bold outline-none focus:border-cyan-200" placeholder="Masukkan Email / ID Akun">
+                <button onclick="processPayment()" class="w-full py-5 bg-cyan-600 text-white rounded-2xl font-black uppercase text-sm shadow-xl shadow-cyan-100 mt-4">Bayar Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Page -->
+    <div id="payment-page" class="page pt-4 pb-12 bg-slate-50">
+        <div class="px-6 max-w-md mx-auto text-center">
+            <div class="bg-white rounded-[3rem] p-10 shadow-2xl">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" class="h-6 mx-auto mb-6">
+                <div class="bg-slate-50 p-4 rounded-3xl inline-block mb-8 border border-slate-100">
+                    <img id="qris-img" class="w-56 h-56 rounded-xl mx-auto">
+                </div>
+                <div class="bg-slate-900 rounded-3xl p-6 text-white text-left space-y-3 mb-8">
+                    <div class="flex justify-between items-center"><span class="text-[10px] font-bold uppercase">Total Bayar</span><span id="p-total" class="text-lg font-black text-cyan-400"></span></div>
+                </div>
+                <button onclick="confirmWA()" class="w-full py-4 bg-green-500 text-white rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-2 shadow-xl"><i class="fa-brands fa-whatsapp text-lg"></i> Konfirmasi via WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_WA = "628976071999";
+        let activeTab = 'desc';
+        let selectedProduct = null;
+        let selectedVariantIdx = 0; // Default 1 Bulan
+
+        const products = [
+            { id: 45, name: "YOUTUBE PREM", price: 10000, image: "https://placehold.co/400x400/ff0000/white?text=YOUTUBE", desc: "Nikmati YouTube tanpa iklan, putar di latar belakang, dan akses YouTube Music Premium. Legal & Bergaransi.", sold: "1rb+", isFlash: true },
+            { id: 25, name: "NETFLIX UHD", price: 30000, image: "https://placehold.co/400x400/e50914/white?text=NETFLIX", desc: "Nonton film dan serial TV 4K UHD. Akun Shared Private Profil (1 User 1 Profil). Anti On Hold.", sold: "450", isFlash: true },
+            { id: 10, name: "CHATGPT PLUS", price: 28000, image: "https://placehold.co/400x400/10b981/white?text=CHATGPT", desc: "Dapatkan akses ke GPT-4, DALL-E, dan fitur terbaru lainnya. Lebih cepat dan cerdas untuk produktivitas.", sold: "220", isFlash: true },
+            { id: 7, name: "CANVA PRO", price: 5000, image: "https://placehold.co/400x400/7c3aed/white?text=CANVA", desc: "Akses jutaan elemen premium, hapus latar belakang, dan fitur desain pro lainnya. Masuk via Email pribadi.", sold: "1rb+" },
+            { id: 32, name: "SPOTIFY FAM", price: 20000, image: "https://placehold.co/400x400/1db954/white?text=SPOTIFY", desc: "Musik tanpa iklan, kualitas tinggi, dan bisa dengerin offline. Akun legal via invite family.", sold: "1rb+" },
+            { id: 35, name: "VIDIO PLAT", price: 25000, image: "https://placehold.co/400x400/f43f5e/white?text=VIDIO", desc: "Tonton Liga Inggris (EPL), BRI Liga 1, dan original series Vidio kualitas HD. Akun shared.", sold: "140" },
+            { id: 37, name: "VIU PREMIUM", price: 5000, image: "https://placehold.co/400x400/fbbf24/white?text=VIU", desc: "Drama Korea terbaru dan variety show Asia terlengkap tanpa iklan. Durasi panjang harga hemat.", sold: "320" },
+            { id: 30, name: "REMINI PRO", price: 5000, image: "https://placehold.co/400x400/475569/white?text=REMINI", desc: "Ubah foto buram jadi jernih kualitas 4K secara instan tanpa batas harian.", sold: "670" },
+            // ... Tambahkan produk lainnya hingga 46 di sini dengan struktur yang sama
+        ];
+
+        // Duplikasi untuk mencapai 46 produk jika belum lengkap (Demo purposes)
+        if(products.length < 46) {
+            for(let i=1; i<=40; i++) {
+                products.push({...products[i%products.length], id: 200+i});
+            }
+        }
+
+        function init() {
+            renderHome();
+        }
+
+        function renderHome() {
+            const main = document.getElementById('main-catalog');
+            const flash = document.getElementById('flash-sale-list');
+            
+            flash.innerHTML = products.filter(p => p.isFlash).map(p => `
+                <div class="min-w-[140px] bg-white rounded-2xl p-3 shadow-md border border-white/50" onclick="openCheckout(${p.id})">
+                    <img src="${p.image}" class="w-full aspect-square rounded-xl object-cover mb-2">
+                    <h3 class="text-[9px] font-black text-slate-800 truncate">${p.name}</h3>
+                    <p class="text-[10px] font-black text-cyan-600">Rp ${p.price.toLocaleString('id-ID')}</p>
+                </div>
+            `).join('');
+
+            main.innerHTML = products.map(p => `
+                <div class="product-card" onclick="openCheckout(${p.id})">
+                    <div class="relative w-full aspect-square bg-slate-100">
+                        <img src="${p.image}" class="w-full h-full object-cover">
+                        <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-[8px] font-extrabold text-slate-500">${p.sold} Terjual</div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[9px] font-black text-slate-800 uppercase truncate">${p.name}</h3>
+                        <p class="text-[11px] font-black text-cyan-600">Rp ${p.price.toLocaleString('id-ID')}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openCheckout(id) {
+            selectedProduct = products.find(p => p.id === id);
+            selectedVariantIdx = 0; // Reset ke 1 bulan
+            
+            document.getElementById('checkout-header').innerHTML = `
+                <img src="${selectedProduct.image}" class="w-20 h-20 rounded-2xl object-cover shadow-lg">
+                <div>
+                    <h1 class="text-xl font-black text-slate-900 leading-tight">${selectedProduct.name}</h1>
+                    <p class="text-xs font-bold text-slate-400 mt-1">Mulai dari</p>
+                    <p class="text-xl font-black text-cyan-600">Rp ${selectedProduct.price.toLocaleString('id-ID')}</p>
+                </div>
+            `;
+            
+            switchTab('desc');
+            renderVariants();
+            showPage('detail-page');
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            const content = document.getElementById('tab-content');
+            const descBtn = document.getElementById('tab-desc-btn');
+            const tncBtn = document.getElementById('tab-tnc-btn');
+
+            if(tab === 'desc') {
+                content.innerText = selectedProduct.desc;
+                descBtn.classList.add('active');
+                tncBtn.classList.remove('active');
+            } else {
+                content.innerHTML = `
+                    • Gunakan akun sesuai panduan yang diberikan.<br>
+                    • Garansi berlaku selama masa berlangganan aktif.<br>
+                    • Dilarang keras mengubah password atau email akun.<br>
+                    • Proses pengerjaan membutuhkan waktu 5-15 menit.
+                `;
+                tncBtn.classList.add('active');
+                descBtn.classList.remove('active');
+            }
+        }
+
+        function renderVariants() {
+            const list = document.getElementById('variants-list');
+            const basePrice = selectedProduct.price;
+            
+            // Generate 3 variasi (1, 2, 3 bulan)
+            const variants = [
+                { title: "1 Bulan - Fast Proses", price: basePrice, badge: "BEST SELLER" },
+                { title: "2 Bulan - Durasi Lebih Lama", price: basePrice * 1.9, badge: "HEMAT 5%" },
+                { title: "3 Bulan - Paket Premium", price: basePrice * 2.7, badge: "HEMAT 10%" }
+            ];
+
+            list.innerHTML = variants.map((v, idx) => `
+                <div class="variant-card p-4 rounded-2xl flex items-center justify-between ${idx === selectedVariantIdx ? 'selected' : ''}" onclick="selectVariant(${idx}, ${v.price})">
+                    <div class="flex items-center gap-3">
+                        <div class="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center ${idx === selectedVariantIdx ? 'border-cyan-600 bg-cyan-600' : ''}">
+                            ${idx === selectedVariantIdx ? '<i class="fa-solid fa-check text-[10px] text-white"></i>' : ''}
+                        </div>
+                        <div>
+                            <h4 class="text-[11px] font-black text-slate-800">${v.title}</h4>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-[8px] font-bold text-green-600 uppercase italic"><i class="fa-solid fa-bolt"></i> Real User</span>
+                                <span class="text-[8px] font-bold text-cyan-600 uppercase italic"><i class="fa-solid fa-shield"></i> Full Garansi</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[12px] font-black text-cyan-600">Rp ${v.price.toLocaleString('id-ID')}</p>
+                        <span class="text-[7px] font-black bg-cyan-600 text-white px-1.5 py-0.5 rounded-md">${v.badge}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            selectedProduct.currentPrice = variants[selectedVariantIdx].price;
+            selectedProduct.currentDuration = variants[selectedVariantIdx].title;
+        }
+
+        function selectVariant(idx, price) {
+            selectedVariantIdx = idx;
+            renderVariants();
+        }
+
+        function processPayment() {
+            const target = document.getElementById('cust-target').value;
+            if(!target) return alert("Harap isi Email/ID target!");
+
+            const unique = Math.floor(Math.random() * 900) + 100;
+            const finalTotal = selectedProduct.currentPrice + unique;
+
+            document.getElementById('p-total').innerText = `Rp ${finalTotal.toLocaleString('id-ID')}`;
+            document.getElementById('qris-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=PANDA-${finalTotal}`;
+            
+            selectedProduct.finalTotal = finalTotal;
+            selectedProduct.target = target;
+            showPage('payment-page');
+        }
+
+        function confirmWA() {
+            const msg = `*ORDER PANDAPEDIA*%0A%0A*Produk:* ${selectedProduct.name}%0A*Paket:* ${selectedProduct.currentDuration}%0A*Total:* Rp ${selectedProduct.finalTotal.toLocaleString('id-ID')}%0A*Target:* ${selectedProduct.target}%0A%0A_Mohon diproses, bukti transfer terlampir._`;
+            window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`);
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function filterProducts() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(q));
+            // Render logic simple filter
+            const main = document.getElementById('main-catalog');
+            main.innerHTML = filtered.map(p => `
+                <div class="product-card" onclick="openCheckout(${p.id})">
+                    <div class="relative w-full aspect-square bg-slate-100">
+                        <img src="${p.image}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[9px] font-black text-slate-800 truncate uppercase">${p.name}</h3>
+                        <p class="text-[11px] font-black text-cyan-600">Rp ${p.price.toLocaleString('id-ID')}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
+
+
